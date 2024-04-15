@@ -10,6 +10,23 @@ namespace Tests.RepositoryTests
     public class RepositoryTest
     {
         [Fact]
+        public void AddShould_CallOnce_WhenObjectCorrect()
+        {
+            //Arrange
+            var dbContextMock = new Mock<IDbContext>();
+            var entityToAdd = new Session { Id = 1, SessionName = "Test Session 1", Date = new DateOnly(2024, 3, 2), Latitude = 12, Longitude = 22 };
+            var dbSetMock = new Mock<DbSet<Session>>();
+            dbContextMock.Setup(m => m.Set<Session>()).Returns(dbSetMock.Object);
+            var repository = new Repository<Session>(dbContextMock.Object);
+
+            //Act
+            repository.Add(entityToAdd);
+
+            //Assert
+            dbSetMock.Verify(m => m.Add(entityToAdd), Times.Once);
+
+        }
+        [Fact]
         public void GetReturnsEntity_WhenEntityExists()
         {
             //Arrange
