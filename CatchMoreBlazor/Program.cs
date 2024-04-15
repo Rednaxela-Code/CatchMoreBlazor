@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using CatchMoreBlazor.Components;
 using DataAccess.Data;
+using DataAccess.Repository.IRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,8 @@ builder.Services
 options.UseSqlServer(
     builder.Configuration
     .GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IUnitOfWork, IUnitOfWork>();
 
 var app = builder.Build();
 
