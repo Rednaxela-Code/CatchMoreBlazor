@@ -7,10 +7,10 @@ namespace DataAccess.Repository
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IDbContext _db;
         internal DbSet<T> _DbSet;
 
-        public Repository(ApplicationDbContext db)
+        public Repository(IDbContext db)
         {
             _db = db;
             this._DbSet = _db.Set<T>();

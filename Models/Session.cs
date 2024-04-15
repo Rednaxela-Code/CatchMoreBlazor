@@ -10,7 +10,7 @@ namespace Models
         public string SessionName { get; set; }
         [Required]
         [DisplayName("Session Date")]
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
         [Required]
         [DisplayName("Latitude")]
         public double Latitude { get; set; }
