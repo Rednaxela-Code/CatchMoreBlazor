@@ -59,5 +59,58 @@ namespace Tests.RepositoryTests
             //Assert
             result.Should().BeNull();
         }
+
+        [Fact]
+        public void GetAllReturnsMultipleEntities_WhenEntitiesExist()
+        {
+            //Arrange
+            var dbContextMock = new Mock<IDbContext>();
+            var expectedEntityOne = new Session { Id = 1, SessionName = "Test Session 1", Date = new DateOnly(2024, 3, 2), Latitude = 12, Longitude = 22 };
+            var expectedEntityTwo = new Session { Id = 2, SessionName = "Test Session 2", Date = new DateOnly(2023, 8, 23), Latitude = 21, Longitude = 2 };
+            var expectedEntityThree = new Session { Id = 3, SessionName = "Test Session 3", Date = new DateOnly(2023, 6, 12), Latitude = 5, Longitude = 54 };
+            var entities = new List<Session> { expectedEntityOne, expectedEntityTwo, expectedEntityThree }.AsQueryable();
+
+            var dbSetMock = new Mock<DbSet<Session>>();
+            dbSetMock.As<IQueryable<Session>>().Setup(m => m.Provider).Returns(entities.Provider);
+            dbSetMock.As<IQueryable<Session>>().Setup(m => m.Expression).Returns(entities.Expression);
+            dbSetMock.As<IQueryable<Session>>().Setup(m => m.ElementType).Returns(entities.ElementType);
+            dbSetMock.As<IQueryable<Session>>().Setup(m => m.GetEnumerator()).Returns(entities.GetEnumerator());
+
+            dbContextMock.Setup(m => m.Set<Session>()).Returns(dbSetMock.Object);
+
+            var repository = new Repository<Session>(dbContextMock.Object);
+
+            //Act
+            var result = repository.GetAll();
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Should().HaveCountGreaterThan(1);
+            result.Should().BeEquivalentTo(entities);
+        }
+
+        [Fact]
+        public void GetAllReturnsNull_WhenEntitiesDontExist()
+        {
+            //Arrange
+            var dbContextMock = new Mock<IDbContext>();
+            var entities = new List<Session> {  }.AsQueryable();
+
+            var dbSetMock = new Mock<DbSet<Session>>();
+            dbSetMock.As<IQueryable<Session>>().Setup(m => m.Provider).Returns(entities.Provider);
+            dbSetMock.As<IQueryable<Session>>().Setup(m => m.Expression).Returns(entities.Expression);
+            dbSetMock.As<IQueryable<Session>>().Setup(m => m.ElementType).Returns(entities.ElementType);
+            dbSetMock.As<IQueryable<Session>>().Setup(m => m.GetEnumerator()).Returns(entities.GetEnumerator());
+
+            dbContextMock.Setup(m => m.Set<Session>()).Returns(dbSetMock.Object);
+
+            var repository = new Repository<Session>(dbContextMock.Object);
+
+            //Act
+            var result = repository.GetAll();
+
+            //Assert
+            result.Should().BeNullOrEmpty();
+        }
     }
 }
