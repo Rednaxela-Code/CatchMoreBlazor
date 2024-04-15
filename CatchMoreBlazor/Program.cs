@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services
-    .AddDbContext<ApplicationDbContext>(options => 
+    .AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(
     builder.Configuration
     .GetConnectionString("DefaultConnection")));
