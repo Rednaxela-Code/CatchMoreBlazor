@@ -1,0 +1,48 @@
+﻿@page "/session"
+@using Models
+@using DataAccess.Repository.IRepository
+@attribute [StreamRendering]
+
+<PageTitle>Session</PageTitle>
+
+<h3>Session</h3>
+
+@if (sessions == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>SessionName</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var session in sessions)
+            {
+                <tr>
+                    <td>@session.Date</td>
+                    <td>@session.SessionName</td>
+                    <td>@session.Latitude</td>
+                    <td>@session.Longitude</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Inject]
+    private IUnitOfWork _unitOfWork { get; set; }
+    private List<Session>? sessions;
+
+    protected override async Task OnInitializedAsync()
+    {
+        sessions = _unitOfWork.Session.GetAll().ToList();
+    }
+}
