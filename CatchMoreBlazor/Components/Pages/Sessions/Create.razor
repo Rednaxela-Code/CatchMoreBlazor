@@ -1,0 +1,51 @@
+﻿@page "/sessioncreate"
+@using Models
+@using DataAccess.Repository.IRepository
+@attribute [StreamRendering]
+
+<PageTitle>Session Create</PageTitle>
+<h3>Create Session</h3>
+
+<EditForm Model="Model" OnValidSubmit="Submit">
+    <dl>
+        <dt>
+            <label for="Name">Session Name:</label>
+        </dt>
+        <dd>
+            <InputText DisplayName="Name" @bind-Value="Model.Name"></InputText>
+        </dd>
+        <dt>
+            <label for="Date">Date:</label>
+        </dt>
+        <dd>
+            <InputDate TValue="DateOnly" DisplayName="Date" @bind-Value="Model.Date"></InputDate>
+        </dd>
+    </dl>
+</EditForm>
+
+@code {
+    [Inject]
+    private IUnitOfWork _unitOfWork { get; set; }
+    public ViewModel Model { get; set; } = new();
+    private Session session { get; set; }
+
+    private string xxx = string.Empty;
+
+    private async Task Submit()
+    {
+        session.SessionName = Model.Name;
+        session.Date = Model.Date;
+        session.Latitude = Model.Latitude;
+        session.Longitude = Model.Longitude;
+
+        _unitOfWork.Session.Add(session);
+    }
+
+    public class ViewModel()
+    {
+        public string Name { get; set; }
+        public DateOnly Date { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+    }
+}

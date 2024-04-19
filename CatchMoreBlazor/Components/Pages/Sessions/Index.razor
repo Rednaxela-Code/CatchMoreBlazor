@@ -16,8 +16,9 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>Date</th>
+                <th>#</th>
                 <th>SessionName</th>
+                <th>Date</th>
                 <th>Latitude</th>
                 <th>Longitude</th>
             </tr>
@@ -26,8 +27,9 @@ else
             @foreach (var session in sessions)
             {
                 <tr>
-                    <td>@session.Date</td>
+                    <td>@session.Id</td>
                     <td>@session.SessionName</td>
+                    <td>@session.Date</td>
                     <td>@session.Latitude</td>
                     <td>@session.Longitude</td>
                 </tr>
